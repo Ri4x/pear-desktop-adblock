@@ -159,7 +159,7 @@ jobs:
         if: ${{ env.VERSION_HASH == '' }}
         uses: irongut/EditRelease@ccf529ad26dddf9996e7dd0f24ca5da4ea507cc2
         with:
-          token: ${{ secrets.GH_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
           id: ${{ steps.get_draft_release.outputs.id }}
           draft: false
           prerelease: false
@@ -172,6 +172,19 @@ jobs:
             Thanks to all contributors! 🏅
 
             (Note for Windows: `Pear-Desktop-Web-Setup-${{ env.VERSION_TAG }}.exe` is an installer, and `Pear-Desktop-${{ env.VERSION_TAG }}.exe` is a portable version)
+
+      - name: Download all build artifacts
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          pattern: build-artifacts-*
+          path: pack
+          merge-multiple: true
+
+      - name: Upload build artifacts to release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release upload "$env:VERSION_TAG" pack/* --repo "${{ github.repository }}" --clobber
 
       - name: Update changelog
         if: ${{ env.VERSION_HASH == '' }}
