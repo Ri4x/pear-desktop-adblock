@@ -2,13 +2,13 @@
 
   "name": "\u0079\u006f\u0075\u0074\u0075\u0062\u0065\u002d\u006d\u0075\u0073\u0069\u0063",
   "desktopName": "com.github.th-ch.\u0079\u006f\u0075\u0074\u0075\u0062\u0065\u002d\u006d\u0075\u0073\u0069\u0063",
-  "productName": "\u0059\u006f\u0075\u0054\u0075\u0062\u0065\u0020\u004d\u0075\u0073\u0069\u0063",
-  "version": "3.12.0",
-  "description": "\u0059\u006f\u0075\u0054\u0075\u0062\u0065\u0020\u004d\u0075\u0073\u0069\u0063 Desktop App - including custom plugins",
+  "productName": "\u0059\u006f\u0075\u0074\u0075\u0062\u0065\u0020\u004d\u0075\u0073\u0069\u0063",
+  "version": "1.0.1",
+  "description": "\u0059\u006f\u0075\u0074\u0075\u0062\u0065\u0020\u004d\u0075\u0073\u0069\u0063 \u0044\u0065\u0073\u006b\u0074\u006f\u0070 \u0041\u0070\u0070 \u002d \u0069\u006e\u0063\u006c\u0075\u0064\u0069\u006e\u0067 \u0063\u0075\u0073\u0074\u006f\u006d \u0070\u006c\u0075\u0067\u0069\u006e\u0073",
   "main": "./dist/main/index.js",
   "type": "module",
   "license": "MIT",
-  "repository": "pear-devs/pear-desktop",
+  "repository": "Ri4x/pear-desktop-adblock",
   "author": {
     "name": "th-ch",
     "email": "th-ch@users.noreply.github.com",

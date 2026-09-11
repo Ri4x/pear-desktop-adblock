@@ -14,6 +14,7 @@ files:
 asarUnpack:
   - assets
 mac:
+  artifactName: "YouTube.Music-${version}-${arch}.${ext}"
   identity: null
   target:
     - target: dmg
@@ -25,20 +26,20 @@ mac:
 win:
   icon: assets/generated/icons/win/icon.ico
   target:
-    - target: nsis-web
+    - target: nsis
       arch:
         - x64
-        - ia32
-        - arm64
     - target: portable
       arch:
         - x64
-        - ia32
-        - arm64
   compression: maximum
-nsisWeb:
+nsis:
+  artifactName: "YouTube.Music-Setup-${version}.${ext}"
   runAfterFinish: false
+portable:
+  artifactName: "YouTube.Music-Portable-${version}.${ext}"
 linux:
+  artifactName: "YouTube.Music-${version}-${arch}.${ext}"
   icon: assets/generated/icons/png
   category: AudioVideo
   syncDesktopName: true
