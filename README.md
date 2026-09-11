@@ -50,13 +50,17 @@ Hides the "Upgrade" (Premium promo) entry from the sidebar navigation menu. Sinc
 .\node_modules\.bin\electron-vite dev --watch
 ```
 
-### Packaging for Windows
+### Packaging for Windows, macOS, and Linux
 
 ```bash
-# Clean, compile, and build installer & portable binaries
-.\node_modules\.bin\del-cli dist pack .vite-inspect
-.\node_modules\.bin\electron-vite build
-.\node_modules\.bin\electron-builder --win -p never
+# Build all supported desktop platforms
+pnpm dist
+
+# Build a single platform
+pnpm dist:win
+pnpm dist:mac
+pnpm dist:mac:arm64
+pnpm dist:linux
 ```
 
-The installer and portable executable will be generated inside the `pack/` directory.
+The generated installers and packages are written to the `pack/` directory. Linux builds include AppImage, Flatpak, deb, rpm, snap, FreeBSD, and tar.gz targets; macOS builds include Intel and Apple Silicon DMGs.

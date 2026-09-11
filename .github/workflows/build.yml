@@ -31,14 +31,14 @@ jobs:
           run_install: false
 
       - name: Setup NodeJS
-        if: startsWith(matrix.os, 'macOS') != true
+        if: startsWith(matrix.os, 'macos') != true
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
       - name: Setup NodeJS for macOS
-        if: startsWith(matrix.os, 'macOS')
+        if: startsWith(matrix.os, 'macos')
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
           node-version: ${{ env.NODE_VERSION }}
@@ -46,22 +46,23 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
-      # Only vite build without release if it is a fork, or it is a pull-request
+      # Validate pull requests without publishing a release.
       - name: Vite Build
-        if: github.repository == 'pear-devs/pear-desktop' && github.event_name == 'pull_request'
+        if: github.event_name == 'pull_request'
         run: |
           pnpm build
 
-      # Build and release if it's the main repository and is not pull-request
+      # Build each platform. The release job publishes all artifacts together.
       - name: Build and release on Mac
-        if: startsWith(matrix.os, 'macOS') && (github.repository == 'pear-devs/pear-desktop' && github.event_name != 'pull_request')
+        if: startsWith(matrix.os, 'macos') && github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pnpm release:mac
+          pnpm dist:mac
+          pnpm dist:mac:arm64
 
       - name: Build and release on Linux
-        if: startsWith(matrix.os, 'ubuntu') && (github.repository == 'pear-devs/pear-desktop' && github.event_name != 'pull_request')
+        if: startsWith(matrix.os, 'ubuntu') && github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -72,14 +73,25 @@ jobs:
           sudo flatpak install -y flathub org.freedesktop.Platform/x86_64/24.08
           sudo flatpak install -y flathub org.freedesktop.Sdk/x86_64/24.08
           sudo flatpak install -y flathub org.electronjs.Electron2.BaseApp/x86_64/24.08
-          pnpm release:linux
+          pnpm dist:linux
+          pnpm dist:linux:deb-arm64
+          pnpm dist:linux:rpm-arm64
 
       - name: Build and release on Windows
-        if: startsWith(matrix.os, 'windows') && (github.repository == 'pear-devs/pear-desktop' && github.event_name != 'pull_request')
+        if: startsWith(matrix.os, 'windows') && github.event_name != 'pull_request'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          pnpm release:win
+          pnpm dist:win
+
+      - name: Upload build artifacts
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f
+        with:
+          name: build-artifacts-${{ matrix.os }}
+          path: pack/
+          retention-days: 7
+          if-no-files-found: error
 
       - name: Test
         uses: coactions/setup-xvfb@b6b4fcfb9f5a895edadc3bc76318fae0ac17c8b3
@@ -94,7 +106,7 @@ jobs:
       contents: write
     runs-on: ubuntu-latest
     name: Release Pear Desktop
-    if: github.repository == 'pear-devs/pear-desktop' && github.ref == 'refs/heads/master'
+    if: github.ref == 'refs/heads/master'
     needs: build
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
@@ -108,14 +120,14 @@ jobs:
           run_install: false
 
       - name: Setup NodeJS
-        if: startsWith(matrix.os, 'macOS') != true
+        if: startsWith(matrix.os, 'macos') != true
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
           node-version: ${{ env.NODE_VERSION }}
           cache: 'pnpm'
 
       - name: Setup NodeJS for macOS
-        if: startsWith(matrix.os, 'macOS')
+        if: startsWith(matrix.os, 'macos')
         uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f
         with:
           node-version: ${{ env.NODE_VERSION }}
