@@ -13,7 +13,7 @@ jobs:
   build:
     permissions:
       contents: write
-    if: github.event.pull_request.draft == false
+    if: github.event_name == 'push' || github.event.pull_request.draft == false
     name: Build Pear Desktop
     runs-on: ${{ matrix.os }}
     strategy:
